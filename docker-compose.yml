@@ -1,0 +1,25 @@
+version: '3.9'
+
+services:
+  web:
+    build: .
+    command: ./entrypoint.sh
+    volumes:
+      - .:/code
+    depends_on:
+      - sqlite3
+    ports:
+      - "8080:8080"
+  sqlite3:
+    container_name: sqlite3_container
+    image: nouchka/sqlite3:latest
+    stdin_open: true
+    tty: true
+    volumes:
+      #Modify following line
+      - ./db.sqlite3:/db.sqlite3
+    ports:
+      - '9000:9000' # expose ports - HOST:CONTAINER
+    restart: unless-stopped
+  redis:
+      image: "redis:alpine"
